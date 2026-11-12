@@ -241,7 +241,7 @@ export default function App() {
                         VF 5 Green: <strong className="text-slate-900">460 Triệu</strong>
                       </div>
                       <div>
-                        VF 5 Premium: <strong className="text-slate-900">515 Triệu</strong>
+                        VF 5 Premium: <strong className="text-slate-900">540 Triệu</strong>
                       </div>
                     </div>
                   </div>
@@ -321,7 +321,7 @@ export default function App() {
                   VinFast VF 5 Thế Hệ Mới (Green & Premium)
                 </div>
                 <div className="text-lg font-extrabold text-blue-600 font-mono-tabular mt-1.5">
-                  460 – 515 Triệu đồng
+                  460 – 540 Triệu đồng
                 </div>
                 <div className="text-xs text-emerald-700 font-bold font-mono-tabular mt-1">
                   Ưu đãi cọc Tiên phong: Giảm 10 Triệu

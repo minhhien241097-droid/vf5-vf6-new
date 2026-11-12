@@ -196,14 +196,14 @@ export const ModelDeepDive: React.FC<ModelDeepDiveProps> = ({
                       <div className="text-xs text-slate-500 mt-1">TỪ</div>
                       <div className="mt-1 flex items-baseline gap-2">
                         <span className="text-4xl font-extrabold text-blue-600 font-mono-tabular">
-                          515
+                          540
                         </span>
                         <span className="text-sm font-bold text-blue-700">
                           Triệu đồng
                         </span>
                       </div>
                       <div className="mt-2 text-xs text-emerald-700 font-semibold">
-                        Cọc Tiên phong còn: 505 Triệu đồng
+                        Cọc Tiên phong còn: 530 Triệu đồng
                       </div>
                     </div>
                     <div className="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600 space-y-1">

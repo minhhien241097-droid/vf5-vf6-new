@@ -179,7 +179,7 @@ export const SpecComparisonSection: React.FC<SpecComparisonSectionProps> = ({
               <div className="mt-2 flex items-baseline gap-1.5">
                 <span className="text-xs text-slate-500">Từ</span>
                 <span className="text-2xl font-extrabold text-blue-600 font-mono-tabular">
-                  515
+                  540
                 </span>
                 <span className="text-xs font-bold text-blue-700">Triệu đồng</span>
               </div>
@@ -342,7 +342,7 @@ export const SpecComparisonSection: React.FC<SpecComparisonSectionProps> = ({
                       VF 5 Green (460 Tr)
                     </th>
                     <th className="py-4 px-5 w-[18.75%] border-l border-white/15 bg-blue-900">
-                      VF 5 Premium (515 Tr)
+                      VF 5 Premium (540 Tr)
                     </th>
                     <th className="py-4 px-5 w-[18.75%] border-l border-white/15">
                       VF 6 Comfort (646 Tr)

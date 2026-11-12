@@ -1,15 +1,6 @@
 export const VINFAST_LOGO_URL =
   '/assets/aistudio/Thi_t_k__ch_a_c__t_n-removebg-preview_5b4eb1ca.png';
 
-export const PROVINCE_OPTIONS = [
-  'TP. Hồ Chí Minh',
-  'Hà Nội',
-  'Bình Phước',
-  'Đồng Nai',
-  'Bình Dương',
-  'Khác',
-] as const;
-
 export interface ExteriorColorOption {
   id: string;
   name: string;
@@ -104,20 +95,6 @@ export interface DealerConfiguration {
   vf6PioneerDiscountVnd: number;
   vf6DepositVnd: number;
   extraDealerGiftNote: string;
-}
-
-export type ImageOverridesMap = Record<string, string>;
-
-export interface CustomerLead {
-  id: string;
-  createdAt: string;
-  source: 'deposit-popup' | 'ai-chat';
-  customerName: string;
-  phone: string;
-  province: string;
-  vehicleLine: string;
-  vehicleColor: string;
-  questionNote?: string;
 }
 
 export const DEFAULT_DEALER_CONFIG: DealerConfiguration = {
@@ -455,38 +432,6 @@ export const VEHICLES_DATA: Record<'vf5' | 'vf6', VehicleShowcaseData> = {
     ],
   },
 };
-
-export function getEffectiveVehiclesData(
-  overrides: ImageOverridesMap
-): Record<'vf5' | 'vf6', VehicleShowcaseData> {
-  const apply = (slotKey: string, defaultUrl: string) =>
-    overrides[slotKey]?.trim() || defaultUrl;
-
-  return {
-    vf5: {
-      ...VEHICLES_DATA.vf5,
-      heroDesktopImage: apply('vf5.heroDesktopImage', VEHICLES_DATA.vf5.heroDesktopImage),
-      promoBannerImage: apply('vf5.promoBannerImage', VEHICLES_DATA.vf5.promoBannerImage),
-      secondaryHeroImage: apply('vf5.secondaryHeroImage', VEHICLES_DATA.vf5.secondaryHeroImage),
-      closingBannerImage: apply('vf5.closingBannerImage', VEHICLES_DATA.vf5.closingBannerImage),
-      exteriorColors: VEHICLES_DATA.vf5.exteriorColors.map((c) => ({
-        ...c,
-        studioImage: apply(`vf5.color.${c.id}`, c.studioImage),
-      })),
-    },
-    vf6: {
-      ...VEHICLES_DATA.vf6,
-      heroDesktopImage: apply('vf6.heroDesktopImage', VEHICLES_DATA.vf6.heroDesktopImage),
-      promoBannerImage: apply('vf6.promoBannerImage', VEHICLES_DATA.vf6.promoBannerImage),
-      secondaryHeroImage: apply('vf6.secondaryHeroImage', VEHICLES_DATA.vf6.secondaryHeroImage),
-      closingBannerImage: apply('vf6.closingBannerImage', VEHICLES_DATA.vf6.closingBannerImage),
-      exteriorColors: VEHICLES_DATA.vf6.exteriorColors.map((c) => ({
-        ...c,
-        studioImage: apply(`vf6.color.${c.id}`, c.studioImage),
-      })),
-    },
-  };
-}
 
 // ============================================================================
 // BẢNG THÔNG SỐ KỸ THUẬT CHI TIẾT 100% THEO ẢNH GỐC CỦA VINFAST VF 5 MỚI
@@ -893,104 +838,6 @@ export const FOUR_TRIM_COMPARISON_ROWS: FourTrimSpecRow[] = [
     vf6Premium: 'Thẻ NFC · Digital Key* · CarPlay/Android Auto · Trợ lý ảo Vita* · VF App Market*',
   },
 ];
-
-// ============================================================================
-// KHO ẢNH GỐC (DÙNG CHO QUẢN TRỊ THAY ĐỔI HÌNH ẢNH LINH HOẠT)
-// ============================================================================
-export const AVAILABLE_ASSET_LIBRARY: { label: string; url: string }[] = [
-  { label: 'Banner Mở Cọc Chính (VF 5 & VF 6)', url: '/vinfast-mo-coc-banner.jpg' },
-  { label: 'Banner Mở Cọc Phụ (VF 6 Mới)', url: '/vinfast-vf6-mo-coc-banner.jpg' },
-  { label: 'VF 5 Mới - Hero Banner', url: '/drive-assets/xe-dien-vinfast-vf5-np-hero-desktop.jpg' },
-  { label: 'VF 5 Mới - Diện mạo ngoại thất', url: '/drive-assets/xe-dien-vinfast-vf5-np-dien-mao-1-desktop.jpg' },
-  { label: 'VF 5 Mới - Banner giới thiệu mở rộng', url: '/drive-assets/xe-dien-vinfast-vf5-np-banner-gioi-thieu-mo-rong-desktop.jpg' },
-  { label: 'VF 5 Mới - Banner cuối', url: '/drive-assets/xe-dien-vinfast-vf5-np-banner-cuoi-desktop.jpg' },
-  { label: 'VF 5 Mới - Phiên bản Premium', url: '/drive-assets/xe-dien-vinfast-vf5-np-phien-ban-premium-desktop.webp' },
-  { label: 'VF 5 Mới - Màu Trắng Nóc Đen', url: '/drive-assets/xe-dien-vinfast-vf5-np-mau-hang2-1-desktop-v2.webp' },
-  { label: 'VF 5 Mới - Màu Đen Nóc Bạc', url: '/drive-assets/xe-dien-vinfast-vf5-np-mau-hang2-2-desktop-v2.webp' },
-  { label: 'VF 5 Mới - Màu Xanh Nóc Đen', url: '/drive-assets/xe-dien-vinfast-vf5-np-mau-hang2-3-desktop-v2.webp' },
-  { label: 'VF 5 Mới - Màu Đỏ Nóc Đen', url: '/drive-assets/xe-dien-vinfast-vf5-np-mau-hang2-4-desktop-v2.webp' },
-  { label: 'VF 5 Mới - Màu Xám Nóc Đen', url: '/drive-assets/xe-dien-vinfast-vf5-np-mau-hang2-5-desktop-v2.webp' },
-  { label: 'VF 5 Mới - Màu Vàng Cát Nóc Đen', url: '/drive-assets/xe-dien-vinfast-vf5-np-mau-hang2-6-desktop-v2.webp' },
-  { label: 'VF 5 Mới - Khoang lái trung tâm', url: '/drive-assets/xe-dien-vinfast-vf5-np-noi-that-day-desktop.jpg' },
-  { label: 'VF 5 Mới - Nội thất ghế da', url: '/drive-assets/xe-dien-vinfast-vf5-np-noi-that-1-desktop.jpg' },
-  { label: 'VF 5 Mới - Hàng ghế sau', url: '/drive-assets/xe-dien-vinfast-vf5-np-noi-that-3-desktop.jpg' },
-  { label: 'VF 5 Mới - Vô lăng & màn hình', url: '/drive-assets/xe-dien-vinfast-vf5-np-noi-that-5-desktop.jpg' },
-  { label: 'VF 6 Mới - Hero Banner', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-hero-banner-desktop.jpg' },
-  { label: 'VF 6 Mới - Điểm nhấn ngoại thất', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-exterior-highlight-banner-desktop.jpg' },
-  { label: 'VF 6 Mới - Banner công nghệ', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-decoration-text-banner-desktop.jpg' },
-  { label: 'VF 6 Mới - Ngoại thất bối cảnh 1', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-exterior-slider-1-desktop.jpg' },
-  { label: 'VF 6 Mới - Ngoại thất bối cảnh 2', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-exterior-slider-2-desktop.jpg' },
-  { label: 'VF 6 Mới - Ngoại thất bối cảnh 3', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-exterior-slider-3-desktop.jpg' },
-  { label: 'VF 6 Mới - Ngoại thất bối cảnh 4', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-exterior-slider-4-desktop.jpg' },
-  { label: 'VF 6 Mới - Ngoại thất bối cảnh 5', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-exterior-slider-5-desktop.jpg' },
-  { label: 'VF 6 Mới - Màu Trắng Ngọc Trai', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-ngoai-that-mau-trang-desktop.webp' },
-  { label: 'VF 6 Mới - Màu Xám Bạc', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-ngoai-that-mau-bac-desktop.webp' },
-  { label: 'VF 6 Mới - Màu Xanh Đại Dương', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-ngoai-that-mau-xanh-duong-desktop.webp' },
-  { label: 'VF 6 Mới - Màu Đỏ Ruby', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-ngoai-that-mau-do-desktop.webp' },
-  { label: 'VF 6 Mới - Màu Đen Huyền Bí', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-ngoai-that-mau-den-desktop.webp' },
-  { label: 'VF 6 Mới - Nội thất Nâu Moca', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-interior-banner-desktop.jpg' },
-  { label: 'VF 6 Mới - Nội thất Trắng Ngọc Trai', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-interior-detail-1-desktop.jpg' },
-  { label: 'VF 6 Mới - Nội thất Đen Thể Thao', url: '/drive-assets/hinh-anh-vinfast-vf6-all-new-interior-detail-3-desktop.jpg' },
-  { label: 'Bảng giá VF 5 Mới gốc', url: '/assets/aistudio/55_bb25bc95.jpg' },
-  { label: 'Bảng giá VF 6 Mới gốc', url: '/assets/aistudio/66_34f2f8a7.jpg' },
-  { label: 'Bảng TSKT VF 5 Mới gốc', url: '/assets/aistudio/VF_5_M_i_TSKT_1111-2_e05ec505.jpg' },
-  { label: 'Bảng TSKT VF 6 Mới gốc', url: '/assets/aistudio/VF_6_M_i_TSKT_1111-3_7c9b8034.jpg' },
-];
-
-// ============================================================================
-// KIẾN THỨC CƠ SỞ CHÍNH THỨC CHO TRỢ LÝ AI TƯ VẤN (CHỈ DÙNG NGUỒN NỘI BỘ)
-// ============================================================================
-export const DEFAULT_AI_KNOWLEDGE_BASE = `
-THÔNG TIN CHÍNH THỨC VINFAST VF 5 THẾ HỆ MỚI & VF 6 THẾ HỆ MỚI:
-
-1. CHƯƠNG TRÌNH ĐẶT CỌC TIÊN PHONG:
-- Thời gian nhận cọc Tiên phong: Từ ngày 12/11/2026 đến hết 18/11/2026.
-- Ưu đãi đặt cọc Tiên phong VF 5 Thế hệ mới: Giảm 10 triệu đồng (Mức cọc: 10 triệu đồng/xe).
-- Ưu đãi đặt cọc Tiên phong VF 6 Thế hệ mới: Giảm 15 triệu đồng (Mức cọc: 15 triệu đồng/xe).
-
-2. GIÁ BÁN CÔNG BỐ:
-- VF 5 Green: Giá niêm yết 460 triệu đồng (Sau ưu đãi cọc Tiên phong 10 triệu còn 450 triệu đồng).
-- VF 5 Premium: Giá niêm yết 515 triệu đồng (Sau ưu đãi cọc Tiên phong 10 triệu còn 505 triệu đồng).
-- VF 6 Comfort: Giá niêm yết 646 triệu đồng (Sau ưu đãi cọc Tiên phong 15 triệu còn 631 triệu đồng).
-- VF 6 Premium: Giá niêm yết 715 triệu đồng (Sau ưu đãi cọc Tiên phong 15 triệu còn 700 triệu đồng).
-
-3. THÔNG TIN CHI TIẾT VINFAST VF 5 THẾ HỆ MỚI (BẠN ĐỒNG HÀNH THÔNG MINH VÀ HIỆU QUẢ):
-- Màu ngoại thất (6 màu): Vàng Cát Nóc Đen, Trắng Ngọc Trai Nóc Đen, Đỏ Đô Nóc Đen, Xanh Đại Dương Nóc Đen, Xám Titan Nóc Đen, Đen Tuyền Nóc Bạc.
-- Kích thước Dài x Rộng x Cao:
-  + VF 5 Green: 3.987 x 1.772 x 1.587 mm, chiều dài cơ sở 2.513 mm, khoảng sáng gầm 170 mm.
-  + VF 5 Premium: 3.987 x 1.772 x 1.595 mm, chiều dài cơ sở 2.513 mm, khoảng sáng gầm 178 mm.
-- Động cơ & Pin:
-  + Công suất tối đa 72 kW, Mô men xoắn cực đại 180 Nm, dẫn động cầu trước (FWD), 2 chế độ lái (Tiết kiệm / Thể thao), phanh tái sinh 4 chế độ.
-  + VF 5 Green: Dung lượng pin 37,23 kWh, quãng đường 1 lần sạc đầy dự kiến 320 km (NEDC), sạc nhanh DC 60 kW (10%-70% dưới 25 phút), sạc AC 6,6 kW.
-  + VF 5 Premium: Dung lượng pin 43 kWh, quãng đường 1 lần sạc đầy dự kiến 370 km (NEDC), sạc nhanh DC 60 kW (10%-70% dưới 28 phút), sạc AC 6,6 kW.
-  + Phụ kiện chính hãng: Dây sạc di động 3,5 kW, Bộ sạc tại nhà 7,4 kW.
-- Khung gầm & Ngoại thất:
-  + Treo trước MacPherson / Treo sau Dầm xoắn. Phanh trước đĩa thông gió / Phanh sau đĩa. Phanh đỗ điện tử tích hợp giữ phanh tự động (Auto Hold) trên cả 2 bản.
-  + VF 5 Green: Mâm thép 16 inch kèm ốp la-zăng (195/60/R16), đèn pha LED, gương chỉnh điện.
-  + VF 5 Premium: Mâm hợp kim 17 inch (205/55/R17), đèn pha LED, gương chỉnh điện, gập điện, tích hợp đèn báo rẽ.
-- Nội thất & Tiện nghi VF 5:
-  + Cả 2 bản đều có màn hình giải trí trung tâm 10 inch, điều hòa tự động, cửa gió điều hòa hàng ghế thứ 2, ghế sau gập 60:40, móc ghế trẻ em ISOFIX, cổng USB Type-A & Type-C.
-  + VF 5 Green: Ghế Nỉ, ghế lái chỉnh cơ 4 hướng, vô lăng thường, âm thanh 2 loa, không có sạc không dây.
-  + VF 5 Premium: Ghế Da, ghế lái chỉnh cơ 6 hướng, vô lăng bọc da tích hợp nút bấm đa chức năng, âm thanh 6 loa, có sạc không dây.
-- An toàn & Tính năng thông minh VF 5:
-  + Cả 2 bản có ABS, EBD, BA, ESC, TCS, HSA, ESS, khóa cửa tự động, cảnh báo chống trộm, chế độ cắm trại, trình duyệt web, FOTA, ứng dụng điện thoại & đồng hồ thông minh.
-  + VF 5 Green: 2 túi khí, camera lùi (phụ kiện chính hãng).
-  + VF 5 Premium: 6 túi khí, chìa khóa thẻ NFC, Chìa khóa số (Digital Key), giám sát áp suất lốp dTPMS, Ga tự động (Cruise Control), Camera lùi, Camera 360, cảm biến đỗ xe phía sau, Apple CarPlay / Android Auto, Trợ lý ảo.
-
-4. THÔNG TIN CHI TIẾT VINFAST VF 6 THẾ HỆ MỚI (MẠNH MẼ. NĂNG ĐỘNG. LÝ TƯỞNG CHO GIA ĐÌNH):
-- Màu ngoại thất (5 màu): Trắng Ngọc Trai, Xám Bạc Khí Động Học, Xanh Đại Dương, Đỏ Ruby Nhiệt Huyết, Đen Huyền Bí.
-- Màu nội thất (3 tùy chọn): Nâu Moca Sang Trọng, Trắng Ngọc Trai Tinh Tế, Đen Thể Thao Đẳng Cấp.
-- Kích thước Dài x Rộng x Cao: 4.246 x 1.827 x 1.616 mm, chiều dài cơ sở 2.730 mm, khoảng sáng gầm 190 mm (trên cả 2 bản Comfort và Premium).
-- Động cơ & Pin:
-  + Công suất tối đa 130 kW, Mô men xoắn cực đại 250 Nm, dẫn động cầu trước (FWD), 3 chế độ lái (Tiết kiệm / Thường / Thể thao), phanh tái sinh 4 chế độ.
-  + Dung lượng pin: 60 kWh trên cả 2 bản.
-  + Quãng đường 1 lần sạc đầy (NEDC): VF 6 Comfort đạt 510 km; VF 6 Premium dự kiến 480 km.
-  + Sạc nhanh DC tối đa 100 kW (10%-70% dưới 35 phút), sạc chậm AC tối đa 7,2 kW. Phụ kiện chính hãng: dây sạc di động 3,5 kW, bộ sạc tại nhà 7,4 kW.
-- Khung gầm, Ngoại thất & Nội thất VF 6:
-  + Treo trước MacPherson / sau Trục xoắn. Phanh đĩa thông gió trước / đĩa đặc sau. Phanh đỗ điện tử & Auto Hold. Cửa sổ chỉnh điện 1 chạm cả 4 cửa. Hàng ghế thứ 2 điều chỉnh hướng & ISOFIX.
-  + VF 6 Comfort: Mâm hợp kim 17 inch (225/60/R17), đèn pha LED, cốp sau chỉnh cơ, gương chỉnh điện báo rẽ, ghế bọc Da và Nỉ, ghế lái chỉnh cơ 6 hướng, điều hòa tự động 1 vùng lọc PM 2.5, màn hình 10 inch, âm thanh 6 loa, gương chiếu hậu trong xe ngày & đêm, 2 túi khí, iTPMS, Camera lùi, cảm biến sau, Ga tự động, Trợ lý ảo Vivi.
-  + VF 6 Premium: Mâm hợp kim 19 inch (235/45/R19), đèn pha LED tự động, đèn nhận diện thương hiệu trước & sau, đèn phanh trên cao LED, gương chỉnh điện gập điện báo rẽ, cốp sau chỉnh điện, ghế bọc Da vân kim cương, ghế lái chỉnh điện 6 hướng, vô lăng 2 chấu bọc da, điều hòa tự động 2 vùng kiểm soát chất lượng & ion hóa không khí lọc Combi 1.0, màn hình giải trí 12,9 inch + màn hình thông tin sau vô lăng, âm thanh 8 loa cao cấp tinh chỉnh bởi Arkamys, gương chống chói tự động, sạc không dây, cổng USB hàng trước & 2 cổng Type-C hàng ghế 2, 6 túi khí, thẻ NFC, Digital Key, dTPMS, Camera 360, cảm biến trước & sau, Trợ lý ảo Vita, Bản đồ, VF App Market, và gói hỗ trợ lái nâng cao ADAS toàn diện (Trợ lái trên cao tốc/khi tắc đường, tự động dừng khẩn cấp, Ga tự động thích ứng ACC, nhận biết biển báo, giữ làn, phanh tự động khẩn cấp trước AEB, cảnh báo điểm mù, cảnh báo mở cửa, cảnh báo phương tiện cắt ngang phía sau).
-`.trim();
 
 export function formatCurrencyVnd(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount) + ' VNĐ';

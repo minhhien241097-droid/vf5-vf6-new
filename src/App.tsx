@@ -10,73 +10,20 @@ import {
   Compass,
   X,
   Calendar,
-  Lock,
   Eye,
 } from 'lucide-react';
 import {
   DEFAULT_DEALER_CONFIG,
   VINFAST_LOGO_URL,
-  getEffectiveVehiclesData,
-  ImageOverridesMap,
-  CustomerLead,
+  VEHICLES_DATA,
 } from './data/vehiclesData';
 import { ResilientImage } from './components/ResilientImage';
 import { ModelDeepDive } from './components/ModelDeepDive';
 import { StudioConfigurator } from './components/StudioConfigurator';
 import { SpecComparisonSection } from './components/SpecComparisonSection';
-import { DepositModal, SiteRouteVariant } from './components/DepositModal';
-import { MiniAdminModal } from './components/MiniAdminModal';
-
-const STORAGE_KEYS = {
-  IMAGE_OVERRIDES: 'vf_newgen_admin_image_overrides_v2',
-  CUSTOMER_LEADS: 'vf_newgen_customer_leads_v1',
-};
-
-function detectRouteVariant(): SiteRouteVariant {
-  if (typeof window === 'undefined') return 'vf56moi';
-  const pathname = window.location.pathname.toLowerCase();
-  const hash = window.location.hash.toLowerCase();
-  const search = window.location.search.toLowerCase();
-
-  if (
-    pathname.includes('/vf56new') ||
-    hash.includes('vf56new') ||
-    search.includes('vf56new')
-  ) {
-    return 'vf56new';
-  }
-  return 'vf56moi';
-}
+import { DepositModal } from './components/DepositModal';
 
 export default function App() {
-  // Route variant ('vf56moi' | 'vf56new')
-  const [routeVariant, setRouteVariant] = useState<SiteRouteVariant>(() =>
-    detectRouteVariant()
-  );
-
-  // Sync routeVariant on browser back/forward or hash changes
-  useEffect(() => {
-    const handleLocationChange = () => {
-      setRouteVariant(detectRouteVariant());
-    };
-    window.addEventListener('popstate', handleLocationChange);
-    window.addEventListener('hashchange', handleLocationChange);
-    return () => {
-      window.removeEventListener('popstate', handleLocationChange);
-      window.removeEventListener('hashchange', handleLocationChange);
-    };
-  }, []);
-
-  const handleSwitchRouteVariant = (variant: SiteRouteVariant) => {
-    setRouteVariant(variant);
-    try {
-      const targetPath = variant === 'vf56new' ? '/vf56new' : '/vf56moi';
-      window.history.pushState({}, '', targetPath);
-    } catch {
-      // ignore history errors in restricted iframes
-    }
-  };
-
   // General studio model switcher ('vf5' | 'vf6')
   const [studioModel, setStudioModel] = useState<'vf5' | 'vf6'>('vf6');
 
@@ -85,104 +32,24 @@ export default function App() {
     'vf5' | 'vf6' | null
   >(null);
 
-  // Simple Popup Modal for Pioneer Deposit
-  const [depositModalState, setDepositModalState] = useState<{
-    isOpen: boolean;
-    model: 'vf5' | 'vf6';
-    trimOrColor?: string;
-  }>({
-    isOpen: false,
-    model: 'vf6',
-  });
-
-  // Mini Admin Modal at very bottom
-  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
-
-  const [imageOverrides, setImageOverrides] = useState<ImageOverridesMap>(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEYS.IMAGE_OVERRIDES);
-      return raw ? JSON.parse(raw) : {};
-    } catch {
-      return {};
-    }
-  });
-
-  const [leads, setLeads] = useState<CustomerLead[]>(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEYS.CUSTOMER_LEADS);
-      return raw ? JSON.parse(raw) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  const dealerConfig = DEFAULT_DEALER_CONFIG;
-  const effectiveVehiclesData = getEffectiveVehiclesData(imageOverrides);
-
-  const rawBannerOverride = imageOverrides['hero.mainBanner']?.trim();
-  const heroMainBannerUrl =
-    rawBannerOverride && !rawBannerOverride.includes('902143083_')
-      ? rawBannerOverride
-      : '/vinfast-mo-coc-banner.jpg';
-
-  const heroVf5CardUrl =
-    imageOverrides['hero.vf5Card']?.trim() ||
-    '/drive-assets/xe-dien-vinfast-vf5-np-phien-ban-premium-desktop.webp';
-  const heroVf6CardUrl =
-    imageOverrides['hero.vf6Card']?.trim() ||
-    '/drive-assets/hinh-anh-vinfast-vf6-all-new-ngoai-that-mau-trang-desktop.webp';
+  // Simple Popup Modal for Pioneer Deposit (Logo + Showroom message)
+  const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
 
   const [lightboxState, setLightboxState] = useState<{
     url: string;
     caption: string;
   } | null>(null);
 
-  const handleSaveImageOverrides = (newOverrides: ImageOverridesMap) => {
-    setImageOverrides(newOverrides);
-    try {
-      localStorage.setItem(
-        STORAGE_KEYS.IMAGE_OVERRIDES,
-        JSON.stringify(newOverrides)
-      );
-    } catch {
-      // ignore storage quota errors
-    }
-  };
+  const dealerConfig = DEFAULT_DEALER_CONFIG;
 
-  const handleSaveLead = (newLeadData: Omit<CustomerLead, 'id' | 'createdAt'>) => {
-    const newLead: CustomerLead = {
-      ...newLeadData,
-      id: `lead-${Date.now()}`,
-      createdAt: new Date().toLocaleString('vi-VN'),
-    };
-    const updated = [newLead, ...leads];
-    setLeads(updated);
-    try {
-      localStorage.setItem(STORAGE_KEYS.CUSTOMER_LEADS, JSON.stringify(updated));
-    } catch {
-      // ignore
-    }
-  };
+  const heroMainBannerUrl = '/vinfast-mo-coc-banner.jpg';
+  const heroVf5CardUrl =
+    '/drive-assets/xe-dien-vinfast-vf5-np-phien-ban-premium-desktop.webp';
+  const heroVf6CardUrl =
+    '/drive-assets/hinh-anh-vinfast-vf6-all-new-ngoai-that-mau-trang-desktop.webp';
 
-  const handleClearLeads = () => {
-    setLeads([]);
-    try {
-      localStorage.removeItem(STORAGE_KEYS.CUSTOMER_LEADS);
-    } catch {
-      // ignore
-    }
-  };
-
-  // Open simple Deposit Popup Modal
-  const handleOpenDepositPopup = (
-    model: 'vf5' | 'vf6' = 'vf6',
-    trimOrColor?: string
-  ) => {
-    setDepositModalState({
-      isOpen: true,
-      model,
-      trimOrColor,
-    });
+  const handleOpenDepositPopup = () => {
+    setIsDepositModalOpen(true);
   };
 
   // Toggle VF 5 or VF 6 detailed section (show clicked model, hide the other) and scroll to it
@@ -263,7 +130,7 @@ export default function App() {
           </a>
           <button
             type="button"
-            onClick={() => handleOpenDepositPopup('vf6')}
+            onClick={handleOpenDepositPopup}
             className="hover:text-blue-600 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
           >
             Đặt Cọc Tiên Phong
@@ -274,7 +141,7 @@ export default function App() {
         <div className="flex items-center shrink-0">
           <button
             type="button"
-            onClick={() => handleOpenDepositPopup('vf6')}
+            onClick={handleOpenDepositPopup}
             className="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-sm shadow-blue-600/20 whitespace-nowrap shrink-0 cursor-pointer"
           >
             Đặt Cọc Tiên Phong
@@ -325,7 +192,7 @@ export default function App() {
                 <div className="mt-5 sm:mt-6 grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2.5 sm:gap-3.5">
                   <button
                     type="button"
-                    onClick={() => handleOpenDepositPopup('vf6')}
+                    onClick={handleOpenDepositPopup}
                     className="px-3 py-2.5 sm:px-5 sm:py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 shadow-sm shadow-blue-600/20 whitespace-nowrap cursor-pointer"
                   >
                     <span className="sm:hidden">Đặt Cọc Tiên Phong</span>
@@ -482,12 +349,10 @@ export default function App() {
         <ModelDeepDive
           selectedDetailModel={selectedDetailModel}
           onChangeDetailModel={(m) => setSelectedDetailModel(m)}
-          vehiclesData={effectiveVehiclesData}
+          vehiclesData={VEHICLES_DATA}
           dealerConfig={dealerConfig}
           onSelectForStudio={(model) => setStudioModel(model)}
-          onOpenBooking={(model, colorName) =>
-            handleOpenDepositPopup(model, colorName)
-          }
+          onOpenBooking={handleOpenDepositPopup}
           onOpenLightbox={(url, caption) => setLightboxState({ url, caption })}
         />
 
@@ -497,11 +362,9 @@ export default function App() {
         <StudioConfigurator
           activeModel={studioModel}
           onSelectModel={setStudioModel}
-          vehiclesData={effectiveVehiclesData}
+          vehiclesData={VEHICLES_DATA}
           dealerConfig={dealerConfig}
-          onOpenBookingWithSelection={(model, colorName) =>
-            handleOpenDepositPopup(model, colorName)
-          }
+          onOpenBookingWithSelection={handleOpenDepositPopup}
           onOpenLightbox={(url, caption) => setLightboxState({ url, caption })}
         />
 
@@ -510,15 +373,13 @@ export default function App() {
         ===================================================================== */}
         <SpecComparisonSection
           dealerConfig={dealerConfig}
-          onOpenBooking={(model, trimOrColor) =>
-            handleOpenDepositPopup(model, trimOrColor)
-          }
+          onOpenBooking={handleOpenDepositPopup}
           onOpenLightbox={(url, caption) => setLightboxState({ url, caption })}
         />
       </main>
 
       {/* =====================================================================
-          CLEAN BRIGHT FOOTER (NO HOTLINE, WITH TINY ADMIN TRIGGER AT BOTTOM)
+          CLEAN BRIGHT FOOTER (NO HOTLINE, NO ADMIN)
       ===================================================================== */}
       <footer className="bg-white border-t border-slate-200 py-8">
         <div className="max-w-[1360px] mx-auto px-6 lg:px-10">
@@ -572,7 +433,7 @@ export default function App() {
               </a>
               <button
                 type="button"
-                onClick={() => handleOpenDepositPopup('vf6')}
+                onClick={handleOpenDepositPopup}
                 className="hover:text-blue-600 transition-colors cursor-pointer"
               >
                 Đặt Cọc Tiên Phong
@@ -580,48 +441,18 @@ export default function App() {
             </div>
           </div>
 
-          {/* Tiny Discreet Admin Trigger Bar at the Very Bottom (Hidden on Mobile) */}
-          <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+          <div className="mt-6 pt-4 border-t border-slate-100 text-[11px] text-slate-400">
             <span>© VinFast VF 5 Thế Hệ Mới & VF 6 Thế Hệ Mới</span>
-            <button
-              type="button"
-              onClick={() => setIsAdminModalOpen(true)}
-              className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
-              title="Mở khóa quản trị (admin)"
-            >
-              <Lock className="w-3 h-3" />
-              <span>Quản trị</span>
-            </button>
           </div>
         </div>
       </footer>
 
       {/* =====================================================================
-          SIMPLE POPUP MODAL FOR PIONEER DEPOSIT (/vf56moi vs /vf56new)
+          SIMPLE POPUP MODAL FOR PIONEER DEPOSIT (LOGO + SHOWROOM MESSAGE)
       ===================================================================== */}
       <DepositModal
-        isOpen={depositModalState.isOpen}
-        onClose={() =>
-          setDepositModalState((prev) => ({ ...prev, isOpen: false }))
-        }
-        initialModel={depositModalState.model}
-        initialTrimOrColor={depositModalState.trimOrColor}
-        onSaveLead={handleSaveLead}
-        routeVariant={routeVariant}
-      />
-
-      {/* =====================================================================
-          TINY BOTTOM ADMIN PANEL MODAL (DYNAMIC IMAGE OVERRIDES, LEADS & LINKS)
-      ===================================================================== */}
-      <MiniAdminModal
-        isOpen={isAdminModalOpen}
-        onClose={() => setIsAdminModalOpen(false)}
-        imageOverrides={imageOverrides}
-        onSaveImageOverrides={handleSaveImageOverrides}
-        leads={leads}
-        onClearLeads={handleClearLeads}
-        routeVariant={routeVariant}
-        onSwitchRouteVariant={handleSwitchRouteVariant}
+        isOpen={isDepositModalOpen}
+        onClose={() => setIsDepositModalOpen(false)}
       />
 
       {/* =====================================================================
